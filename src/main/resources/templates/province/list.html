@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Province List</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Province List</h1>
+    <p>
+        <a href="/customers">Back to Customer List</a> |
+        <a href="/provinces/create">Create New Province</a>
+    </p>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Province Name</th>
+            <th>Total Customers</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="province : ${provinces}">
+            <td th:text="${province.provinceDtoId}"></td>
+            <td th:text="${province.provinceDtoName}"></td>
+            <td th:text="${province.totalCustomers}"></td>
+            <td>
+                <a th:href="@{/provinces/{id}/customers(id=${province.provinceDtoId})}">List Customers</a> |
+                <a th:href="@{/provinces/delete/{id}(id=${province.provinceDtoId})}" 
+                   onclick="return confirm('Are you sure you want to delete this province?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -10,6 +10,10 @@ h1 {
     margin-bottom: 20px;
 }
 
+.missing-data {
+    color: red;
+}
+
 .container {
     background-color: white;
     padding: 20px;

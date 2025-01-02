@@ -1,9 +1,11 @@
 package com.example.customerman.model;
 
-
 import jakarta.persistence.*;
+import java.util.Set;
 
-
+/**
+ * 
+ */
 @Entity
 @Table(name = "province")
 public class Province {
@@ -12,12 +14,11 @@ public class Province {
     private Long provinceId;
     private String provinceName;
 
-
-    public Province(Long provinceId, String province) {
-        this.provinceId = provinceId;
-        this.provinceName = province;
-    }
     public Province() {
+    }
+
+    public Province(String provinceName) {
+        this.provinceName = provinceName;
     }
 
     public Long getProvinceId() {

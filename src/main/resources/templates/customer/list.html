@@ -7,8 +7,11 @@
 </head>
 <body>
 <div class="container">
-    <h1>Customers</h1>
-    <a href="/customers/create" class="create-link">Create new customer</a>
+    <h1>Customer List</h1>
+    <p>
+        <a href="/customers/create" class="create-link">Create new customer</a> |
+        <a href="/provinces">View Provinces</a>
+    </p>
 
     <div class="search-box">
         <form th:action="@{/customers}" method="get">
@@ -26,7 +29,10 @@
         <th:block th:each="customer : ${customers}">
             <tr>
                 <td th:text="${customer.customerName}"></td>
-                <td th:text="${customer.province != null ? customer.province.provinceName : ''}"></td>
+                <td>
+                    <span th:if="${customer.province == null}" class="missing-data">Data missing</span>
+                    <span th:if="${customer.province != null}" th:text="${customer.province.provinceName}"></span>
+                </td>
                 <td class="action-links">
                     <a class="details-link" th:href="@{/customers/details/__${customer.customerId}__}">Details</a>
                     <a class="edit-link" th:href="@{/customers/update/__${customer.customerId}__}">Edit</a>
@@ -38,7 +44,7 @@
 
     <div class="pagination" th:if="${customers.totalPages > 0}">
         <a th:if="${customers.number > 1}" th:href="@{/customers(page=0, search=${search})}">&lt;&lt;</a>
-        <a th:if="${customers.number > 0}" 
+        <a th:if="${customers.number > 0}"
            th:href="@{/customers(page=${customers.number - 1}, search=${search})}"
            th:text="${customers.number}">
         </a>
