@@ -1,39 +1,105 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Province List</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Provinces</title>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .pagination a {
+            padding: 5px 10px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            color: #666;
+        }
+        .pagination .active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+        .action-links {
+            display: flex;
+            gap: 10px;
+        }
+        .action-links a {
+            text-decoration: none;
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: white;
+        }
+        .delete-link {
+            background-color: #dc3545;
+        }
+        .list-customers-link {
+            background-color: #17a2b8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Province List</h1>
-    <p>
-        <a href="/customers">Back to Customer List</a> |
-        <a href="/provinces/create">Create New Province</a>
-    </p>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Province Name</th>
-            <th>Total Customers</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="province : ${provinces}">
-            <td th:text="${province.provinceDtoId}"></td>
-            <td th:text="${province.provinceDtoName}"></td>
-            <td th:text="${province.totalCustomers}"></td>
-            <td>
-                <a th:href="@{/provinces/{id}/customers(id=${province.provinceDtoId})}">List Customers</a> |
-                <a th:href="@{/provinces/delete/{id}(id=${province.provinceDtoId})}" 
-                   onclick="return confirm('Are you sure you want to delete this province?')">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="container">
+        <h1>Provinces</h1>
+        <p>
+            <a href="/customers">Back to Customer List</a> |
+            <a href="/provinces/create">Create new province</a>
+        </p>
+        <div th:if="${message}">
+            <span th:text="${message}"></span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Province Name</th>
+                    <th>Total Customers</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="province : ${provinces}">
+                    <td th:text="${province.provinceDtoName}"></td>
+                    <td th:text="${province.totalCustomers}"></td>
+                    <td class="action-links">
+                        <a class="delete-link" th:href="@{/provinces/delete/__${province.provinceDtoId}__}" 
+                           onclick="return confirm('Are you sure you want to delete this province? All customers in this province will be updated to have no province.')">Delete</a>
+                        <a class="list-customers-link" th:href="@{/provinces/__${province.provinceDtoId}__/customers}">List Customers</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination" th:if="${provinces.totalPages > 0}">
+            <a th:if="${provinces.number > 1}" th:href="@{/provinces(page=0)}">&lt;&lt;</a>
+            <a th:if="${provinces.number > 0}" 
+               th:href="@{/provinces(page=${provinces.number - 1})}"
+               th:text="${provinces.number}">
+            </a>
+            <span class="active" th:text="${provinces.number + 1}"></span>
+            <a th:if="${provinces.number + 1 < provinces.totalPages}" 
+               th:href="@{/provinces(page=${provinces.number + 1})}"
+               th:text="${provinces.number + 2}">
+            </a>
+            <a th:if="${provinces.number + 2 < provinces.totalPages}" 
+               th:href="@{/provinces(page=${provinces.totalPages - 1})}">&gt;&gt;</a>
+        </div>
+    </div>
 </body>
 </html>

@@ -7,7 +7,10 @@ import com.example.customerman.repository.ICustomerRepository;
 import com.example.customerman.repository.IProvinceRepository;
 import com.example.customerman.service.province.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,12 +21,23 @@ import java.util.stream.StreamSupport;
  * Province Service
  */
 @Service
+@Transactional
 public class ProvinceService implements IProvinceService {
     @Autowired
     private IProvinceRepository provinceRepository;
 
     @Autowired
     private ICustomerRepository customerRepository;
+
+    @Override
+    public Page<ProvinceDto> findAll(Pageable pageable) {
+        return provinceRepository.findAll(pageable)
+                .map(province -> new ProvinceDto(
+                        province.getProvinceId(),
+                        province.getProvinceName(),
+                        countCustomersByProvinceId(province.getProvinceId())
+                ));
+    }
 
     @Override
     public Iterable<Province> findAll() {

@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface IProvinceRepository extends JpaRepository<Province, Long> {
+    @Query(value = "SELECT COUNT(c.customer_id) FROM customers c WHERE c.province_id = :provinceId", nativeQuery = true)
+    int countCustomersByProvinceId(@Param("provinceId") Long provinceId);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE customers SET province_id = NULL WHERE province_id = :provinceId", nativeQuery = true)

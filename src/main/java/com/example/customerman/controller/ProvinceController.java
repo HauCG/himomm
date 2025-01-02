@@ -4,14 +4,12 @@ import com.example.customerman.dto.ProvinceDto;
 import com.example.customerman.model.Province;
 import com.example.customerman.service.province.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/provinces")
@@ -20,9 +18,9 @@ public class ProvinceController {
     private IProvinceService provinceService;
 
     @GetMapping("")
-    public ModelAndView listProvinces() {
-        List<ProvinceDto> provinces = provinceService.findAllProvinceDto();
+    public ModelAndView listProvinces(@RequestParam(defaultValue = "0") int page) {
         ModelAndView modelAndView = new ModelAndView("/province/list");
+        Page<ProvinceDto> provinces = provinceService.findAll(PageRequest.of(page, 10));
         modelAndView.addObject("provinces", provinces);
         return modelAndView;
     }
@@ -35,14 +33,16 @@ public class ProvinceController {
     }
 
     @PostMapping("/create")
-    public String saveProvince(Province province) {
+    public String saveProvince(@ModelAttribute("province") Province province, RedirectAttributes redirect) {
         provinceService.save(province);
+        redirect.addFlashAttribute("message", "New province created successfully");
         return "redirect:/provinces";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProvince(@PathVariable Long id) {
+    public String deleteProvince(@PathVariable Long id, RedirectAttributes redirect) {
         provinceService.remove(id);
+        redirect.addFlashAttribute("message", "Province deleted successfully");
         return "redirect:/provinces";
     }
 

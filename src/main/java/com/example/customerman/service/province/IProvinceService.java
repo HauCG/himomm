@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IProvinceService {
+    Page<ProvinceDto> findAll(Pageable pageable);
     Iterable<Province> findAll();
 
     Optional<Province> findById(Long id);
