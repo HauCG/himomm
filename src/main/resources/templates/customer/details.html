@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Customer Details</h1>
+    <p>
+        <a href="/customers">Customer list</a>
+    </p>
+    
+    <div class="details-card">
+        <div class="details-header">
+            <h2 th:text="${'Customer ' + customer.customerId}"></h2>
+        </div>
+        <div class="details-content">
+            <table class="details-table">
+                <tr>
+                    <th>Customer ID:</th>
+                    <td th:text="${customer.customerId}"></td>
+                </tr>
+                <tr>
+                    <th>Customer Name:</th>
+                    <td th:text="${customer.customerName}"></td>
+                </tr>
+                <tr>
+                    <th>Province:</th>
+                    <td th:text="${customer.province != null ? customer.province.provinceName : 'Not specified'}"></td>
+                </tr>
+                <!-- Add more customer details here -->
+            </table>
+        </div>
+        <div class="details-actions">
+            <a th:href="@{/customers/update/__${customer.customerId}__}" class="btn btn-edit">Edit</a>
+            <a th:href="@{/customers/delete/__${customer.customerId}__}" class="btn btn-delete">Delete</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

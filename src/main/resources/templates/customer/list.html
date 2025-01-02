@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer List</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Customers</h1>
+    <a href="/customers/create" class="create-link">Create new customer</a>
+
+    <div class="search-box">
+        <form th:action="@{/customers}" method="get">
+            <input type="text" name="search" th:value="${search}" placeholder="Search by name..."/>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>Customer Name</th>
+            <th>Province</th>
+            <th>Actions</th>
+        </tr>
+        <th:block th:each="customer : ${customers}">
+            <tr>
+                <td th:text="${customer.customerName}"></td>
+                <td th:text="${customer.province != null ? customer.province.provinceName : ''}"></td>
+                <td class="action-links">
+                    <a class="details-link" th:href="@{/customers/details/__${customer.customerId}__}">Details</a>
+                    <a class="edit-link" th:href="@{/customers/update/__${customer.customerId}__}">Edit</a>
+                    <a class="delete-link" th:href="@{/customers/delete/__${customer.customerId}__}">Delete</a>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+
+    <div class="pagination" th:if="${customers.totalPages > 0}">
+        <a th:if="${customers.number > 1}" th:href="@{/customers(page=0, search=${search})}">&lt;&lt;</a>
+        <a th:if="${customers.number > 0}" 
+           th:href="@{/customers(page=${customers.number - 1}, search=${search})}"
+           th:text="${customers.number}">
+        </a>
+        <span class="current" th:text="${customers.number + 1}"></span>
+        <a th:if="${customers.number < customers.totalPages - 1}"
+           th:href="@{/customers(page=${customers.number + 1}, search=${search})}"
+           th:text="${customers.number + 2}">
+        </a>
+        <a th:if="${customers.number < customers.totalPages - 2}"
+           th:href="@{/customers(page=${customers.totalPages - 1}, search=${search})}">&gt;&gt;</a>
+    </div>
+</div>
+</body>
+</html>

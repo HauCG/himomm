@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Customer</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Update customer</h1>
+    <p>
+        <a href="/customers">Customer list</a>
+    </p>
+    <th:block th:if="${message}">
+        <p class="message" th:text="${message}"></p>
+    </th:block>
+    <form th:action="@{/customers/update}" th:object="${customer}" method="post">
+        <input type="hidden" th:field="*{customerId}"/>
+        <table>
+            <tr>
+                <td>Customer Name:</td>
+                <td><input type="text" th:field="*{customerName}"/></td>
+            </tr>
+            <tr>
+                <td>Province:</td>
+                <td>
+                    <select th:field="*{province}" required>
+                        <option th:each="province : ${provinces}"
+                                th:value="${province.provinceId}"
+                                th:text="${province.provinceName}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Update customer"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
