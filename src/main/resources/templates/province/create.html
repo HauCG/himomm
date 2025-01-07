@@ -1,28 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Province</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout :: layout}">
 <body>
-<div class="container">
-    <h1>Create New Province</h1>
-    <p>
-        <a href="/provinces">Back to Province List</a>
-    </p>
-    <form th:action="@{/provinces/create}" th:object="${province}" method="post">
-        <table>
-            <tr>
-                <td>Province Name:</td>
-                <td><input type="text" th:field="*{provinceName}" required/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Create Province"/></td>
-            </tr>
-        </table>
-    </form>
+<div th:fragment="content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Create New Province</h1>
+        <a href="/provinces" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to Provinces
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form th:action="@{/provinces/create}" 
+                          th:object="${province}" 
+                          method="POST"
+                          class="needs-validation"
+                          novalidate>
+                        
+                        <div class="mb-3">
+                            <label for="provinceName" class="form-label">Province Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="provinceName" 
+                                   th:field="*{provinceName}"
+                                   required>
+                            <div class="invalid-feedback">
+                                Please enter a province name.
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Province
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 </div>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.example.customerman.controller;
 import com.example.customerman.model.Customer;
 import com.example.customerman.service.customer.ICustomerService;
 import com.example.customerman.service.province.IProvinceService;
+import com.example.customerman.testting.ModelCounterOpenedTimePage.CountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,14 @@ public class MainController {
     @Autowired
     private IProvinceService provinceService;
 
+    @Autowired
+    private final CountService countService;
+
+    public MainController(CountService countService) {
+        this.countService = countService;
+    }
+
+
     @GetMapping("/create")
     public ModelAndView showCreateForm() {
         ModelAndView modelAndView = new ModelAndView("/customer/create");
@@ -40,9 +49,23 @@ public class MainController {
         return modelAndView;
     }
 
+
     @GetMapping("")
     public ModelAndView listCustomers(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-                                    @RequestParam(name = "search", required = false, defaultValue = "") String search) {
+                                    @RequestParam(name = "search", required = false, defaultValue = "") String search) throws RuntimeException {
+        
+
+////        TUNG lỗi trả về ngoại lệ
+//        if (true) {
+//            throw new RuntimeException("Simulated runtime error for debugging purposes.");
+//        }
+
+
+        countService.incrementCount();
+        System.out.println("Trang này được hiển thị: " + countService.getCount().getCount());
+
+
+
         ModelAndView modelAndView = new ModelAndView("/customer/list");
         Page<Customer> customers;
         if (search != null && !search.isEmpty()) {
