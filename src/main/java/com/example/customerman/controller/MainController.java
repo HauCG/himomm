@@ -3,7 +3,7 @@ package com.example.customerman.controller;
 import com.example.customerman.model.Customer;
 import com.example.customerman.service.customer.ICustomerService;
 import com.example.customerman.service.province.IProvinceService;
-import com.example.customerman.testting.ModelCounterOpenedTimePage.CountService;
+import com.example.customerman.testting.ModelCounterOpenedTimePage.Count;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,10 +12,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+
+
+
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/customers")
+@SessionAttributes("count")
 public class MainController {
     @Autowired
     private ICustomerService customerService;
@@ -23,11 +33,9 @@ public class MainController {
     @Autowired
     private IProvinceService provinceService;
 
-    @Autowired
-    private final CountService countService;
-
-    public MainController(CountService countService) {
-        this.countService = countService;
+    @ModelAttribute("count")
+    public Count setUpCount() {
+        return new Count(0); // Khởi tạo với giá trị ban đầu
     }
 
 
@@ -50,19 +58,22 @@ public class MainController {
     }
 
 
+
+
     @GetMapping("")
     public ModelAndView listCustomers(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-                                    @RequestParam(name = "search", required = false, defaultValue = "") String search) throws RuntimeException {
-        
+                                    @RequestParam(name = "search", required = false, defaultValue = "") String search,
+     @ModelAttribute("count") Count count
 
+    ) throws RuntimeException {
+
+        count.increment();
+        System.out.println("Số lần trang được hiển thị với SessionAttributes a là " + count.getCount());
 ////        TUNG lỗi trả về ngoại lệ
 //        if (true) {
 //            throw new RuntimeException("Simulated runtime error for debugging purposes.");
 //        }
 
-
-        countService.incrementCount();
-        System.out.println("Trang này được hiển thị: " + countService.getCount().getCount());
 
 
 

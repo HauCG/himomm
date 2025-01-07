@@ -15,13 +15,13 @@ public class MainControllerAOP {
     @After(" execution(* com.example.customerman.controller.MainController.listCustomers(..))")
     public void showAction(JoinPoint joinPoint) {
         numble++;
-        System.out.println("Hiển thị list " + numble + " lần.");
+        System.out.println("Hiển thị list với aop" + numble + " lần.");
     }
 
 
     @After(" execution(* com.example.customerman.controller.MainController.*(..))")
     public void checkDone(JoinPoint joinPoint) {
         numble++;
-        System.out.println("kiểm tra phương thức trueyèn vào tất cả");
+        System.out.println("Thông báo khi một phương thức hoàn thành! ");
     }
 }
