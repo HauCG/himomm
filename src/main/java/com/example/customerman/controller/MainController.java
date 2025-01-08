@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/customers")
-@SessionAttributes("count")
+@SessionAttributes("account")
 public class MainController {
     @Autowired
     private ICustomerService customerService;
@@ -35,7 +35,7 @@ public class MainController {
 
     @ModelAttribute("count")
     public Count setUpCount() {
-        return new Count(0); // Khởi tạo với giá trị ban đầu
+        return new Count(0);
     }
 
 
