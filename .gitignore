@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### OpenCV ###
+lib/opencv_java*.dll
+**/opencv_java*.dll
