@@ -1,19 +1,27 @@
 package com.example.customerman.model;
 
 import jakarta.persistence.*;
-
+/**
+ * 
+ */
 @Entity
 @Table(name = "account")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Đặt @GeneratedValue ở đây
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Column(name = "account_id", nullable = false)
     private Long accountId;
 
+    @Column(name = "account_name", nullable = false)
     private String accountName;
+    
+    @Column(name = "account_password", nullable = false)
     private String accountPassword;
+    
+    @Column(name = "account_email")
     private String accountEmail;
 
-    // Getter và Setter
+    // Getter v` Setter
     public Long getAccountId() {
         return accountId;
     }

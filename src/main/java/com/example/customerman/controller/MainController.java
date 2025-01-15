@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -19,8 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 
-
-
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -39,7 +39,7 @@ public class MainController {
     }
 
 
-    @GetMapping("/create")
+    @GetMapping("/createForm")
     public ModelAndView showCreateForm() {
         ModelAndView modelAndView = new ModelAndView("/customer/create");
         modelAndView.addObject("customer", new Customer());
@@ -69,13 +69,6 @@ public class MainController {
 
         count.increment();
         System.out.println("Số lần trang được hiển thị với SessionAttributes a là " + count.getCount());
-////        TUNG lỗi trả về ngoại lệ
-//        if (true) {
-//            throw new RuntimeException("Simulated runtime error for debugging purposes.");
-//        }
-
-
-
 
         ModelAndView modelAndView = new ModelAndView("/customer/list");
         Page<Customer> customers;
@@ -89,7 +82,7 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping("/update/{id}")
+    @GetMapping("/showUpdate/{id}")
     public ModelAndView showUpdateForm(@PathVariable Long id) {
         Optional<Customer> customer = customerService.findById(id);
         if (customer.isPresent()) {
@@ -111,7 +104,7 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/showDelete/{id}")
     public ModelAndView showDeleteForm(@PathVariable Long id) {
         Optional<Customer> customer = customerService.findById(id);
         if (customer.isPresent()) {
@@ -123,9 +116,9 @@ public class MainController {
         }
     }
 
-    @PostMapping("/delete")
-    public String deleteCustomer(@ModelAttribute("customer") Customer customer) {
-        customerService.remove(customer.getCustomerId());
+    @PostMapping("/delete/{customerId}")
+    public String deleteCustomer(@PathVariable("customerId") Long customerId) {
+        customerService.remove(customerId);
         return "redirect:/customers";
     }
 
@@ -133,9 +126,45 @@ public class MainController {
     public String showCustomerDetails(@PathVariable long id, Model model) {
         Optional<Customer> customerOptional = customerService.findById(id);
         if (customerOptional.isPresent()) {
+            RestTemplate restTemplate = new RestTemplate();
+            Customer customer = restTemplate.getForObject("http://localhost:8080/customer/findByIdRestful" + id, Customer.class);
+            model.addAttribute("customer", customer);
+
             model.addAttribute("customer", customerOptional.get());
             return "customer/details";
         }
         return "redirect:/customers";
     }
+
+//    @PostMapping("/customers/search")
+//    public String searchCustomers(@RequestParam(required = false) String customerName,
+//                                  @RequestParam(required = false) Long province,
+//                                  Model model) {
+//        List<Customer> customers;
+//
+//        // Kiểm tra trường hợp không có tham số nào
+//        if (customerName == null && province == null) {
+//            return "redirect:/customers"; // Trở về trang danh sách khách hàng
+//        }
+//
+//        // Kiểm tra trường hợp có cả hai tham số
+//        if (customerName != null && province != null) {
+//            customers = customerService.searchCustomersByNameAndProvince(customerName, province);
+//        }
+//        // Kiểm tra trường hợp chỉ có tỉnh
+//        else if (province != null) {
+//            customers = customerService.searchCustomersByProvince(province);
+//        }
+//        // Kiểm tra trường hợp chỉ có tên
+//        else {
+//            customers = customerService.searchCustomersByCustomerName(customerName);
+//        }
+//
+//        // Thêm danh sách khách hàng vào model để hiển thị trên trang
+//        model.addAttribute("customers", customers);
+////        model.addAttribute("param", new SearchParams(name, province)); // Giữ lại các tham số tìm kiếm
+//
+//        // Trả về view hiển thị danh sách khách hàng
+//        return "redirect:/customers"; // Thay đổi tên view nếu cần
+//    }
 }

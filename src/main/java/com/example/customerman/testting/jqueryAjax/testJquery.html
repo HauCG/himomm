@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/cesiumjs/1.78/Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+<h1>
+<!--    table-->
+</h1>
+
+
+<script>
+    function displayData() {
+        // vòng lặp thực thi và sau đó dùng .html() để thêm vào bảng html ở trên
+    }
+
+
+    $.ajax({
+        url: 'http://localhost:8080/customer',
+        type: 'GET',
+        dataType: 'json',
+
+        success: function (data) {
+            console.log(data);
+        //     chỉ lấy nội dung thì dùng data.content
+        //     hoặc lấy cái gì thì chấm nó ra như đối tượng. VD : data.content.pageable
+            displayData(data); // gọi hàm displayData() để hiển thị dữ liệu
+        },
+
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown);
+        }
+    });
+
+</script>
+</body>
+</html>
+
