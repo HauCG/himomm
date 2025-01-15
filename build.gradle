@@ -15,6 +15,12 @@ java {
 
 repositories {
     mavenCentral()
+
+//    them maven o duoi de su dung cac thu vien khac
+    maven {
+        url 'https://repo1.maven.org/maven2/'
+    }
+
 }
 
 dependencies {
@@ -33,6 +39,9 @@ dependencies {
 
     // Apache Commons IO for enhanced file operations
     implementation 'commons-io:commons-io:2.15.1'
+
+    // Thư viện OpenCV
+    implementation group: 'org.openpnp', name: 'opencv', version: '4.5.5-0'
 }
 
 tasks.named('test') {
