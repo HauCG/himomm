@@ -39,3 +39,10 @@ out/
 ### OpenCV ###
 lib/opencv_java*.dll
 **/opencv_java*.dll
+
+### Log Files ###
+hs_err_pid*.log
+replay_pid*.log
+*.log
+logs/
+*.hprof
