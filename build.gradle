@@ -20,7 +20,11 @@ repositories {
     maven {
         url 'https://repo1.maven.org/maven2/'
     }
-
+    
+    // Add OpenPnP repository
+    maven {
+        url 'https://github.com/openpnp/opencv/tree/develop/releases'
+    }
 }
 
 dependencies {
@@ -42,8 +46,16 @@ dependencies {
 
     // Thư viện OpenCV
     implementation group: 'org.openpnp', name: 'opencv', version: '4.5.5-0'
+    
+    // Add native library configuration
+    implementation files('lib/opencv-455.jar')
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Add native library path configuration
+tasks.withType(JavaExec) {
+    systemProperty "java.library.path", file("lib").absolutePath
 }
